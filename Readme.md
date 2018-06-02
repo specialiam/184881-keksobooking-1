@@ -1,11 +1,11 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дмитрий Байко](https://up.htmlacademy.ru/javascript/14/user/184881).
-* Наставник: `Неизвестно`.
+* Наставник: Не имеется.
 
 ---
 
-_Не удаляйте и не обращайте внимание на файлы:_<br>
+_Не удаляйте и не обращайте внимание на файлы:_<br>````
 _`.editorconfig`, `.eslintrc`, `.gitattributes`, `.gitignore`, `.travis.yml`, `package-lock.json`, `package.json`._
 
 ---
