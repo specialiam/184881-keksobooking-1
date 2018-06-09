@@ -28,5 +28,13 @@
 
     return randomValue;
   };
+
+  window.clearBlock = function (block) {
+    while (block.firstChild) {
+      block.removeChild(block.firstChild);
+    }
+
+    return;
+  };
 })();
 

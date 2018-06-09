@@ -1,4 +1,5 @@
 'use strict';
+
 var PIN_WIDTH = 50; //px
 var PIN_HEIGHT = 70; //px
 
@@ -14,7 +15,6 @@ var createFeaturesList = function () {
   for (var i = 0; i < getRandomInt(0, OFFER_FEATURES.length); i++) {
     featuresList[i] = genrRandom(OFFER_FEATURES, false);
   }
-
   return featuresList;
 };
 
@@ -93,8 +93,6 @@ var renderAd = function (ad) {
   adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
   adElement.querySelector('.popup__description').textContent = ad.offer.description;
 
-  //featuresList.appendChild(featureFragment);
-
   var adPhoto = adElement.querySelector('.popup__photo').cloneNode(true);
 
   for (var i = 0; i < ad.offer.photos.length; i++) {
@@ -105,58 +103,47 @@ var renderAd = function (ad) {
     adPhotos[i].src = ad.offer.photos[i];
   }
 
-  var featuresList = adTemplate.querySelector('.popup__features');
+  var featuresList = adElement.querySelector('.popup__features');
 
-  var renderFeatures = function (ad) {
-    var featureElements = featuresList.querySelectorAll('.popup__feature');
+  var renderFeatures = function (renderBlock) {
+
+    var featureElements = renderBlock.querySelectorAll('.popup__feature');
     var featureElement = featureElements[0].cloneNode(true);
 
-    featureElement.classList = 'popup__feature';
-    featureElement.classList.add('popup__feature--' + ad.offer.features[i]);
+    clearBlock(renderBlock);
 
-    for (var i = 0; i < featureElements.length; i++) {
-      featuresList.removeChild(featureElements[i]);
+    var featuresFragment = document.createDocumentFragment();
+
+    for (var i = 0; i < ad.offer.features.length; i++) {
+      var featurePopup = featureElement.cloneNode(true);
+      featurePopup.classList = 'popup__feature';
+      featurePopup.classList.add('popup__feature--' + ad.offer.features[i]);
+      featuresFragment.appendChild(featurePopup);
     }
 
-    // var featureFragment = document.createDocumentFragment();
-    // for (var i = 0; i < ad.offer.features.length; i++) {
-    //
-    //   featureFragment.appendChild(featureElement);
-    // }
-
-    return featureElement;
+    return featuresFragment;
   };
 
-  var featureFragment = document.createDocumentFragment();
-
-  for (var i = 0; i < ad.offer.features.length; i++) {
-    featureFragment.appendChild(renderFeatures(ad));
-  }
-
-  console.log(featureFragment);
+  featuresList.appendChild(renderFeatures(featuresList));
 
   return adElement;
 };
 
 var ads = createAds(8);
-console.log(ads);
-
 var mapElement = document.querySelector('.map');
 var mapPinsElement = mapElement.querySelector('.map__pins');
 var mapFilterContainer = mapElement.querySelector('.map__filters-container');
+var pinsFragment = document.createDocumentFragment();
+var adsFragment = document.createDocumentFragment();
 
-var fragment = document.createDocumentFragment();
-var fragment2 = document.createDocumentFragment();
-
-fragment2.appendChild(renderAd(ads[0]));
-console.log(fragment2);
+adsFragment.appendChild(renderAd(ads[0]));
 
 for (var i = 0; i < ads.length; i++) {
-  fragment.appendChild(renderPin(ads[i]));
+  pinsFragment.appendChild(renderPin(ads[i]));
 }
 
-mapPinsElement.appendChild(fragment);
-mapElement.insertBefore(fragment2, mapFilterContainer);
+mapPinsElement.appendChild(pinsFragment);
+mapElement.insertBefore(adsFragment, mapFilterContainer);
 
 
 
