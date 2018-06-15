@@ -8,7 +8,6 @@
     genrRandom: function (array, repeat) {
       var index = window.utils.getRandomInt(0, array.length - 1);
       var randomValue = array[index];
-
       if (!repeat) {
         array.splice(index, 1);
       }
