@@ -18,6 +18,7 @@
   function onPinMainClick() {
     makeMapActive();
     window.renderMap();
+    window.fillAddress();
     pinMain.removeEventListener('mouseup', onPinMainClick);
   }
 })();

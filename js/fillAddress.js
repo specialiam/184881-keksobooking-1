@@ -9,7 +9,16 @@
 
   var startCoords = {
     x: +pinMain.style.left.replace(/\D+/g, '') + pinWidth / 2,
-    y: +pinMain.style.top.replace(/\D+/g, '') + pinHeight + partPinHeight
+    y: +pinMain.style.top.replace(/\D+/g, '') + pinHeight / 2
+  };
+
+  window.fillAddress = function () {
+    startCoords = {
+      x: +pinMain.style.left.replace(/\D+/g, '') + pinWidth / 2,
+      y: +pinMain.style.top.replace(/\D+/g, '') + pinHeight + partPinHeight
+    };
+
+    adressInput.value = startCoords.x + ', ' + startCoords.y;
   };
 
   adressInput.value = startCoords.x + ', ' + startCoords.y;
