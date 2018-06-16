@@ -42,14 +42,14 @@
         avatar: 'img/avatars/user0' + window.utils.getRandomInt(1, 8) + '.png',
       },
       offer: {
-        title: window.utils.genrRandom(OFFER_TITLES, false),
+        title: window.utils.genrRandom(OFFER_TITLES),
         address: window.utils.getRandomInt(100, 600) + ', ' + window.utils.getRandomInt(100, 600),
         price: window.utils.getRandomInt(1000, 1000000),
-        type: window.utils.genrRandom(OFFER_TYPES, false),
+        type: window.utils.genrRandom(OFFER_TYPES),
         rooms: window.utils.getRandomInt(1, 5),
         guests: window.utils.getRandomInt(1, 10),
-        checkin: window.utils.genrRandom(CHECK_TIMES, false),
-        checkout: window.utils.genrRandom(CHECK_TIMES, false),
+        checkin: window.utils.genrRandom(CHECK_TIMES),
+        checkout: window.utils.genrRandom(CHECK_TIMES),
         features: createFeaturesList(),
         description: '',
         photos: createPhotoList()
@@ -65,7 +65,7 @@
   function createFeaturesList() {
     var featuresList = [];
     for (var i = 0; i < window.utils.getRandomInt(0, OFFER_FEATURES.length); i++) {
-      featuresList[i] = window.utils.genrRandom(OFFER_FEATURES, false);
+      featuresList[i] = window.utils.genrRandom(OFFER_FEATURES);
     }
     return featuresList;
   }
@@ -73,7 +73,7 @@
   function createPhotoList() {
     var photoList = [];
     for (var i = 0; i < OFFER_PHOTOS.length; i++) {
-      photoList[i] = window.utils.genrRandom(OFFER_PHOTOS, false);
+      photoList[i] = window.utils.genrRandom(OFFER_PHOTOS);
     }
     return photoList;
   }
@@ -83,6 +83,7 @@
     for (var i = 0; i < quantity; i++) {
       offersList[i] = createAdItem();
     }
+
     return offersList;
   };
 })();
