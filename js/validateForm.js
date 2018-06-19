@@ -1,5 +1,5 @@
 'use strict';
-
+// Can be simpled
 (function () {
   var HOUSES_MIN_PRICES = {
     bungalo: 0,
