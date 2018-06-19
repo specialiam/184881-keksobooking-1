@@ -3,28 +3,25 @@
 (function () {
   var ESC_KEYCODE = 27;
   var mapElement = document.querySelector('.map');
-  var adForm = document.querySelector('.ad-form');
   var pinMain = mapElement.querySelector('.map__pin--main');
+  var adForm = document.querySelector('.ad-form');
   var ads = window.createAds(8);
 
-  window.formService.makeFieldsetDisabled();
+  window.formService.makeFieldsetDisabled(true);
 
   pinMain.addEventListener('mouseup', onPinMainClick);
 
-  mapElement.addEventListener('click', function (evt) {
-    onPinClick(evt);
-  });
+  mapElement.addEventListener('click', onPinClick);
 
   function makeMapActive() {
     mapElement.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    window.formService.makeFieldsetActive();
+    window.formService.makeFieldsetDisabled(false);
   }
 
   function onPinMainClick() {
     makeMapActive();
     renderMap();
-    window.fillAddress();
     pinMain.removeEventListener('mouseup', onPinMainClick);
   }
 
