@@ -21,15 +21,9 @@
     adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
     adElement.querySelector('.popup__description').textContent = ad.offer.description;
 
-    var adPhoto = adElement.querySelector('.popup__photo').cloneNode(true);
 
-    for (var i = 0; i < ad.offer.photos.length - 1; i++) {
-      if (ad.offer.photos.length > 1) {
-        adElement.querySelector('.popup__photos').appendChild(adPhoto);
-      }
-      var adPhotos = adElement.querySelectorAll('.popup__photo');
-      adPhotos[i].src = ad.offer.photos[i];
-    }
+    var photoList = adElement.querySelector('.popup__photos');
+    photoList.appendChild(window.renderPhotos(photoList, ad));
 
     var featuresList = adElement.querySelector('.popup__features');
     featuresList.appendChild(window.renderFeatures(featuresList, ad));

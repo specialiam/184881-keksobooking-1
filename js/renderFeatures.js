@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var featuresFragment = document.createDocumentFragment();
+  var fragment = document.createDocumentFragment();
   window.renderFeatures = function (renderBlock, ad) {
     var featureElements = renderBlock.querySelectorAll('.popup__feature');
     var featureElement = featureElements[0].cloneNode(true);
@@ -10,9 +10,9 @@
       var featurePopup = featureElement.cloneNode(true);
       featurePopup.classList = 'popup__feature';
       featurePopup.classList.add('popup__feature--' + ad.offer.features[i]);
-      featuresFragment.appendChild(featurePopup);
+      fragment.appendChild(featurePopup);
     }
 
-    return featuresFragment;
+    return fragment;
   };
 })();
