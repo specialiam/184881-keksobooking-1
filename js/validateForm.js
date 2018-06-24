@@ -17,7 +17,7 @@
   var inputType = document.querySelector('#type');
 
   roomNumber.addEventListener('change', onRoomNumberChange);
-  formSubmit.addEventListener('click', onFormSubmutClick);
+  formSubmit.addEventListener('click', onFormSubmitClick);
   timein.addEventListener('change', onTimeChange.bind(null, timein, timeout));
   timeout.addEventListener('change', onTimeChange.bind(null, timeout, timein));
   inputType.addEventListener('change', onTypeChange);
@@ -36,11 +36,11 @@
     }
   }
 
-  function onFormSubmutClick(evt) {
+  function onFormSubmitClick(evt) {
     var roomNumberValue = roomNumber.value;
     var capacityValue = capacity.value;
     if ((roomNumberValue !== roomNumberMax && capacityValue === '0') || (roomNumberValue < capacityValue)) {
-      roomNumber.style.outline = '2px solid rgba(255,0,0,0.5)';
+      roomNumber.focus();
       evt.preventDefault();
     }
   }
