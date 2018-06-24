@@ -2,6 +2,7 @@
 
 (function () {
   var adForm = document.querySelector('.ad-form');
+  var resetBtn = document.querySelector('.ad-form__reset');
 
   window.formService = {
     makeFieldsetDisabled: function (isDisabled) {
@@ -11,6 +12,23 @@
       }
     }
   };
+
+  resetBtn.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    resetForm();
+  });
+
+  adForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(adForm), resetForm, window.backend.onError);
+    evt.preventDefault();
+  });
+
+  function resetForm() {
+    adForm.reset();
+    window.movePinToStart();
+    window.fillAddress();
+  }
+
 })();
 
 

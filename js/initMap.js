@@ -5,7 +5,8 @@
   var mapElement = document.querySelector('.map');
   var pinMain = mapElement.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
-  var ads = window.createAds(8);
+  var ads;
+  var quantityAds = 8;
 
   window.formService.makeFieldsetDisabled(true);
 
@@ -13,10 +14,13 @@
 
   mapElement.addEventListener('click', onPinClick);
 
+  window.backend.load(onAdsLoad, window.backend.onError);
+
   function makeMapActive() {
     mapElement.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     window.formService.makeFieldsetDisabled(false);
+    window.fillAddress();
   }
 
   function onPinMainClick() {
@@ -51,6 +55,7 @@
 
   function onPinClick(evt) {
     var id;
+
     if (evt.target.nodeName === 'IMG') {
       id = evt.target.parentNode.getAttribute('data-id');
     } else {
@@ -79,4 +84,9 @@
 
     showAd(ads[id]);
   }
+
+  function onAdsLoad(adsArray) {
+    ads = adsArray.slice(0, quantityAds);
+  }
+
 })();
