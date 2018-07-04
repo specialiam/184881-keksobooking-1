@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var RANK_TO_SHOW = 4;
+
   var housePriceMap = {
     low: function (value) {
       return (value < 10000);
@@ -18,16 +20,11 @@
   window.ads = [];
   window.adsRange = [];
 
-
   var filtersContainer = document.querySelector('.map__filters');
-  var filterItems = filtersContainer.querySelectorAll('.map__filter');
   var featuresContainer = document.querySelector('.map__features');
-  var featuresItems = featuresContainer.querySelectorAll('.map__checkbox');
-
-  
+  var mapElement = document.querySelector('.map');
 
   window.backend.load(onAdsLoad, window.backend.onError);
-  
 
   featuresContainer.addEventListener('change', function () {
 
@@ -36,7 +33,9 @@
 
   filtersContainer.addEventListener('change', function () {
 
+    var mapCard = mapElement.querySelector('.map__card');
     var filtersWithCheckbox = document.querySelectorAll('.map__filter, .map__checkbox:checked');
+    var valueMap = createValueMap(filtersWithCheckbox);
 
     window.totalAds = [];
 
@@ -44,17 +43,22 @@
     var adsCopy = window.ads.slice();
 
     adsCopy.forEach(function (item) {
-      rankArray.push(getRank(item, createValueMap(filtersWithCheckbox)));
+      rankArray.push(getRank(item, valueMap));
     });
     
     adsCopy.forEach(function (item, i) {
-      if (getIndices(rankArray).indexOf(i) !== -1) {
+      if (getIndices(rankArray, RANK_TO_SHOW).indexOf(i) !== -1) {
         window.totalAds.push(item);
       }
     });
 
+    if (mapCard) {
+      mapElement.removeChild(mapCard);
+    }
+    
     window.renderMap(window.totalAds);
   });
+
 
   function createValueMap(items) {
     var valueMap = [];
@@ -102,7 +106,7 @@
         item.features.forEach(function (item1) {
           ad.offer.features.forEach(function (item2) {
             if (item1 === item2) {
-              rank += 1;
+              rank += 0.1;
             }
           });
         });
@@ -113,9 +117,18 @@
     return rank;
   }
 
-  function getIndices(array) {
+  function getIndices(array, element) {
     var indices = [];
-    var element = 4;
+    var maxValue = Math.max.apply(Math, array);
+
+    console.log(maxValue);
+
+    if (maxValue <= 4) {
+      element = 4;
+    }
+
+    element = maxValue;
+
     var idx = array.indexOf(element);
 
     while (idx !== -1) {
@@ -123,7 +136,9 @@
       idx = array.indexOf(element, idx + 1);
     }
 
+    console.log(indices);
     return indices;
+
   }
 
   function onAdsLoad(adsArray) {

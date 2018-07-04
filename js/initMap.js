@@ -36,14 +36,15 @@
   }
 
   window.renderMap = function (data) {
+    var currentDate = data;
     if (data.length > ADS_QUANTITY) {
-      data.splice(0, ADS_QUANTITY);
+      currentDate = data.slice(0, ADS_QUANTITY);
     }
     var mapPinsElement = mapElement.querySelector('.map__pins');
     mapPinsElement.innerHTML = '';
     var pinsFragment = document.createDocumentFragment();
-    for (var i = 0; i < data.length; i++) {
-      pinsFragment.appendChild(window.renderPin((data[i]), i));
+    for (var i = 0; i < currentDate.length; i++) {
+      pinsFragment.appendChild(window.renderPin((currentDate[i]), i));
     }
     mapPinsElement.appendChild(pinsFragment);
   };
