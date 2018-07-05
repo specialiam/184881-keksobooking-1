@@ -17,6 +17,9 @@
   };
   var filtersContainer = document.querySelector('.map__filters');
   var mapElement = document.querySelector('.map');
+  var ads = [];
+
+  window.backend.load(onAdsLoad, window.backend.onError);
 
   var onFilterChange = window.debounce(function () {
     renderFilteredAds();
@@ -30,7 +33,8 @@
     var filtersWithCheckbox = document.querySelectorAll('.map__filter, .map__checkbox:checked');
     var valueMap = createValueMap(filtersWithCheckbox);
     var rankArray = [];
-    var adsCopy = window.totalAds.slice();
+
+    var adsCopy = ads.slice();
     
     window.totalAds = [];
 
@@ -123,5 +127,9 @@
 
     return indices;
 
+  }
+
+  function onAdsLoad(adsArray) {
+    ads = adsArray;
   }
 })();
