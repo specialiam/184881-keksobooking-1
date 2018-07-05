@@ -2,13 +2,16 @@
 
 (function () {
   var ESC_KEYCODE = 27;
-  var ADS_QUANTITY = 5;
+  var ENTER_KEYCODE = 13;
+
   var mapElement = document.querySelector('.map');
   var pinMain = mapElement.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   window.formService.makeFieldsetDisabled(true);
+  window.totalAds = [];
 
   pinMain.addEventListener('mouseup', onPinMainClick);
+  pinMain.addEventListener('keydown', onPinMainClick);
 
   mapElement.addEventListener('click', onPinClick);
 
@@ -21,10 +24,12 @@
     window.fillAddress();
   }
 
-  function onPinMainClick() {
-    makeMapActive();
-    window.renderMap(window.totalAds);
-    pinMain.removeEventListener('mouseup', onPinMainClick);
+  function onPinMainClick(evt) {
+    if (evt.keyCode === ENTER_KEYCODE || evt.type === 'mouseup') {
+      makeMapActive();
+      window.renderMap(window.totalAds);
+      pinMain.removeEventListener('mouseup', onPinMainClick);
+    }
   }
 
   function closePopup(evt) {
@@ -32,28 +37,18 @@
       var popup = document.querySelector('.map__card');
       popup.remove();
       document.querySelector('.map__pin--active').classList.remove('map__pin--active');
+
+      document.removeEventListener('keydown', closePopup);
     }
   }
-
-  window.renderMap = function (data) {
-    var currentDate = data;
-    if (data.length > ADS_QUANTITY) {
-      currentDate = data.slice(0, ADS_QUANTITY);
-    }
-    var mapPinsElement = mapElement.querySelector('.map__pins');
-    mapPinsElement.innerHTML = '';
-    var pinsFragment = document.createDocumentFragment();
-    for (var i = 0; i < currentDate.length; i++) {
-      pinsFragment.appendChild(window.renderPin((currentDate[i]), i));
-    }
-    mapPinsElement.appendChild(pinsFragment);
-  };
 
   function showAd(ad) {
     var adsFragment = document.createDocumentFragment();
     var mapFilterContainer = mapElement.querySelector('.map__filters-container');
     adsFragment.appendChild(window.renderAd(ad));
     mapElement.insertBefore(adsFragment, mapFilterContainer);
+
+    document.addEventListener('keydown', closePopup);
   }
 
   function onPinClick(evt) {

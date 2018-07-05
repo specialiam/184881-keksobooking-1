@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var RANK_TO_SHOW = 4;
-
   var housePriceMap = {
     low: function (value) {
       return (value < 10000);
@@ -17,37 +15,31 @@
       return false;
     }
   };
-  window.ads = [];
-  window.adsRange = [];
-
   var filtersContainer = document.querySelector('.map__filters');
-  var featuresContainer = document.querySelector('.map__features');
   var mapElement = document.querySelector('.map');
 
-  window.backend.load(onAdsLoad, window.backend.onError);
-
-  featuresContainer.addEventListener('change', function () {
-
+  var onFilterChange = window.debounce(function () {
+    renderFilteredAds();
   });
 
+  filtersContainer.addEventListener('change', onFilterChange);
 
-  filtersContainer.addEventListener('change', function () {
-
+  function renderFilteredAds () {
     var mapCard = mapElement.querySelector('.map__card');
+    var checkboxCount = document.querySelectorAll('.map__checkbox:checked').length; 
     var filtersWithCheckbox = document.querySelectorAll('.map__filter, .map__checkbox:checked');
     var valueMap = createValueMap(filtersWithCheckbox);
-
-    window.totalAds = [];
-
     var rankArray = [];
-    var adsCopy = window.ads.slice();
+    var adsCopy = window.totalAds.slice();
+    
+    window.totalAds = [];
 
     adsCopy.forEach(function (item) {
       rankArray.push(getRank(item, valueMap));
     });
     
     adsCopy.forEach(function (item, i) {
-      if (getIndices(rankArray, RANK_TO_SHOW).indexOf(i) !== -1) {
+      if (getIndices(rankArray, checkboxCount).indexOf(i) !== -1) {
         window.totalAds.push(item);
       }
     });
@@ -55,9 +47,9 @@
     if (mapCard) {
       mapElement.removeChild(mapCard);
     }
-    
-    window.renderMap(window.totalAds);
-  });
+  
+      window.renderMap(window.totalAds);
+  }
 
 
   function createValueMap(items) {
@@ -89,24 +81,23 @@
     filterMap.forEach(function (item) {
       if (item.id === 'price') {
         if (housePriceMap[item.value](ad.offer[item.id])) {
-          rank += 1;
+          rank += 5;
         }
       }
 
       if (item.value === 'any') {
-        rank += 1;
+        rank += 5;
       }
 
       if (ad.offer[item.id] + '' === item.value) {
-        rank += 1;
+        rank += 5;
       }
 
-      // Придумать рейты для features, возможно упростить эту штуку с помощью includes
       if (item.features && item.features.length > 0) {
         item.features.forEach(function (item1) {
           ad.offer.features.forEach(function (item2) {
             if (item1 === item2) {
-              rank += 0.1;
+              rank += 1;
             }
           });
         });
@@ -117,18 +108,12 @@
     return rank;
   }
 
-  function getIndices(array, element) {
+  function getIndices(array, countCheck) {
+    var RANK_TO_SHOW = 20;
+    var CHECKBOX_RANK = 1;
+
     var indices = [];
-    var maxValue = Math.max.apply(Math, array);
-
-    console.log(maxValue);
-
-    if (maxValue <= 4) {
-      element = 4;
-    }
-
-    element = maxValue;
-
+    var element = RANK_TO_SHOW + (countCheck * CHECKBOX_RANK);
     var idx = array.indexOf(element);
 
     while (idx !== -1) {
@@ -136,13 +121,7 @@
       idx = array.indexOf(element, idx + 1);
     }
 
-    console.log(indices);
     return indices;
 
   }
-
-  function onAdsLoad(adsArray) {
-    window.ads = adsArray;
-  }
-
 })();

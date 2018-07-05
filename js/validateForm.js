@@ -9,12 +9,13 @@
   };
   var timein = document.querySelector('#timein');
   var timeout = document.querySelector('#timeout');
-  var capacity = document.querySelector('#capacity');
-  var roomNumber = document.querySelector('#room_number');
-  var roomNumberMax = roomNumber.options[3].value;
   var formSubmit = document.querySelector('.ad-form__submit');
   var price = document.querySelector('#price');
   var inputType = document.querySelector('#type');
+  var roomNumber = document.querySelector('#room_number');
+  var capacity = document.querySelector('#capacity');
+  var roomNumberMax = +roomNumber.options[3].value;
+  var form = document.querySelector('.ad-form');
 
   roomNumber.addEventListener('change', onRoomNumberChange);
   formSubmit.addEventListener('click', onFormSubmitClick);
@@ -24,24 +25,27 @@
 
   function onRoomNumberChange() {
     var roomNumberValue = +roomNumber.value;
-    var capacityValue = +capacity.value;
+    var capacityValue = +capacity.value; 
+
     roomNumber.style.outline = 'none';
 
-    if (roomNumberValue < capacityValue) {
+    if (roomNumberValue <= capacityValue || roomNumberValue !== roomNumberMax && capacityValue === 0) {
       capacity.value = roomNumberValue;
     }
 
     if (roomNumberValue === roomNumberMax) {
       capacity.value = 0;
     }
+
   }
 
-  function onFormSubmitClick(evt) {
-    var roomNumberValue = roomNumber.value;
-    var capacityValue = capacity.value;
-    if ((roomNumberValue !== roomNumberMax && capacityValue === '0') || (roomNumberValue < capacityValue)) {
-      roomNumber.focus();
-      evt.preventDefault();
+  function onFormSubmitClick() {
+    var roomNumberValue = +roomNumber.value;
+    var capacityValue = +capacity.value;
+    if ((roomNumberValue !== roomNumberMax && capacityValue === 0) || (roomNumberValue < capacityValue)) {
+      roomNumber.setCustomValidity('Количество комнат не соответсвует количеству гостей.');
+    } else {
+      roomNumber.setCustomValidity('');
     }
   }
 

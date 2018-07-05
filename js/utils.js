@@ -15,6 +15,11 @@
       while (block.firstChild) {
         block.removeChild(block.firstChild);
       }
+    },
+    deleteElements: function (elements) {
+        elements.forEach(function (item) {
+          item.parentElement.removeChild(item);
+        });
     }
   };
 })();
