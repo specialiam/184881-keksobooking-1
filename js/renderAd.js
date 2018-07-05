@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var HOUSE_TYPES = {
+  var houseTypeMap = {
     flat: 'Квартира',
     bungalo: 'Бунгало',
     house: 'Дом',
@@ -16,7 +16,7 @@
     adElement.querySelector('.popup__title').textContent = ad.offer.title;
     adElement.querySelector('.popup__text--address').textContent = ad.offer.address;
     adElement.querySelector('.popup__text--price').textContent = ad.offer.price + '₽/ночь';
-    adElement.querySelector('.popup__type').textContent = HOUSE_TYPES[ad.offer.type];
+    adElement.querySelector('.popup__type').textContent = houseTypeMap[ad.offer.type];
     adElement.querySelector('.popup__text--capacity').textContent = ad.offer.rooms + ' комнаты для ' + ad.offer.guests + ' гостей';
     adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
     adElement.querySelector('.popup__description').textContent = ad.offer.description;

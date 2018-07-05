@@ -2,15 +2,16 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var ENTER_KEYCODE = 13;
+
   var mapElement = document.querySelector('.map');
   var pinMain = mapElement.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
-  var ads;
-  var quantityAds = 8;
-
   window.formService.makeFieldsetDisabled(true);
+  window.totalAds = [];
 
   pinMain.addEventListener('mouseup', onPinMainClick);
+  pinMain.addEventListener('keydown', onPinMainClick);
 
   mapElement.addEventListener('click', onPinClick);
 
@@ -23,10 +24,12 @@
     window.fillAddress();
   }
 
-  function onPinMainClick() {
-    makeMapActive();
-    renderMap();
-    pinMain.removeEventListener('mouseup', onPinMainClick);
+  function onPinMainClick(evt) {
+    if (evt.keyCode === ENTER_KEYCODE || evt.type === 'mouseup') {
+      makeMapActive();
+      window.renderMap(window.totalAds);
+      pinMain.removeEventListener('mouseup', onPinMainClick);
+    }
   }
 
   function closePopup(evt) {
@@ -34,16 +37,9 @@
       var popup = document.querySelector('.map__card');
       popup.remove();
       document.querySelector('.map__pin--active').classList.remove('map__pin--active');
-    }
-  }
 
-  function renderMap() {
-    var mapPinsElement = mapElement.querySelector('.map__pins');
-    var pinsFragment = document.createDocumentFragment();
-    for (var i = 0; i < ads.length; i++) {
-      pinsFragment.appendChild(window.renderPin((ads[i]), i));
+      document.removeEventListener('keydown', closePopup);
     }
-    mapPinsElement.appendChild(pinsFragment);
   }
 
   function showAd(ad) {
@@ -51,6 +47,8 @@
     var mapFilterContainer = mapElement.querySelector('.map__filters-container');
     adsFragment.appendChild(window.renderAd(ad));
     mapElement.insertBefore(adsFragment, mapFilterContainer);
+
+    document.addEventListener('keydown', closePopup);
   }
 
   function onPinClick(evt) {
@@ -82,11 +80,11 @@
       evt.target.classList.add('map__pin--active');
     }
 
-    showAd(ads[id]);
+    showAd(window.totalAds[id]);
   }
 
   function onAdsLoad(adsArray) {
-    ads = adsArray.slice(0, quantityAds);
+    window.totalAds = adsArray;
   }
 
 })();
