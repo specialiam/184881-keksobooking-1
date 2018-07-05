@@ -15,7 +15,6 @@
   var roomNumber = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
   var roomNumberMax = +roomNumber.options[3].value;
-  var form = document.querySelector('.ad-form');
 
   roomNumber.addEventListener('change', onRoomNumberChange);
   formSubmit.addEventListener('click', onFormSubmitClick);
