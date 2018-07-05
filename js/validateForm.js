@@ -24,7 +24,7 @@
 
   function onRoomNumberChange() {
     var roomNumberValue = +roomNumber.value;
-    var capacityValue = +capacity.value; 
+    var capacityValue = +capacity.value;
 
     roomNumber.style.outline = 'none';
 
