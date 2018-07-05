@@ -17,9 +17,9 @@
       }
     },
     deleteElements: function (elements) {
-        elements.forEach(function (item) {
-          item.parentElement.removeChild(item);
-        });
+      elements.forEach(function (item) {
+        item.parentElement.removeChild(item);
+      });
     }
   };
 })();

@@ -27,21 +27,21 @@
 
   filtersContainer.addEventListener('change', onFilterChange);
 
-  function renderFilteredAds () {
+  function renderFilteredAds() {
     var mapCard = mapElement.querySelector('.map__card');
-    var checkboxCount = document.querySelectorAll('.map__checkbox:checked').length; 
+    var checkboxCount = document.querySelectorAll('.map__checkbox:checked').length;
     var filtersWithCheckbox = document.querySelectorAll('.map__filter, .map__checkbox:checked');
     var valueMap = createValueMap(filtersWithCheckbox);
     var rankArray = [];
 
     var adsCopy = ads.slice();
-    
+
     window.totalAds = [];
 
     adsCopy.forEach(function (item) {
       rankArray.push(getRank(item, valueMap));
     });
-    
+
     adsCopy.forEach(function (item, i) {
       if (getIndices(rankArray, checkboxCount).indexOf(i) !== -1) {
         window.totalAds.push(item);
@@ -51,8 +51,8 @@
     if (mapCard) {
       mapElement.removeChild(mapCard);
     }
-  
-      window.renderMap(window.totalAds);
+
+    window.renderMap(window.totalAds);
   }
 
 
