@@ -1,7 +1,7 @@
 'use strict';
-// Can be simpled
+
 (function () {
-  var HOUSES_MIN_PRICES = {
+  var housesMinPricesMap = {
     bungalo: 0,
     flat: 1000,
     house: 5000,
@@ -55,7 +55,7 @@
 
   function onTypeChange() {
     var houseType = inputType.value;
-    var minPrice = HOUSES_MIN_PRICES[houseType];
+    var minPrice = housesMinPricesMap[houseType];
     price.min = minPrice;
     price.placeholder = minPrice;
   }

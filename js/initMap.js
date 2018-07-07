@@ -10,8 +10,8 @@
   window.formService.makeFieldsetDisabled(true);
   window.totalAds = [];
 
-  pinMain.addEventListener('mouseup', onPinMainClick);
-  pinMain.addEventListener('keydown', onPinMainClick);
+  pinMain.addEventListener('mouseup', pinMainActivate);
+  pinMain.addEventListener('keydown', pinMainActivate);
 
   mapElement.addEventListener('click', onPinClick);
 
@@ -24,11 +24,11 @@
     window.fillAddress();
   }
 
-  function onPinMainClick(evt) {
+  function pinMainActivate(evt) {
     if (evt.keyCode === ENTER_KEYCODE || evt.type === 'mouseup') {
       makeMapActive();
       window.renderMap(window.totalAds);
-      pinMain.removeEventListener('mouseup', onPinMainClick);
+      pinMain.removeEventListener(evt.type, pinMainActivate);
     }
   }
 
