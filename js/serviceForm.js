@@ -1,15 +1,21 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
+
+  var mapElement = document.querySelector('.map');
+  var mapPinsElement = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
   var resetBtn = document.querySelector('.ad-form__reset');
+  var successBlock = document.querySelector('.success');
+  var fieldsetItems = adForm.querySelectorAll('fieldset');
+  var avatarDefaultUrl = 'img/muffin-grey.svg';
 
   window.formService = {
     makeFieldsetDisabled: function (isDisabled) {
-      var fieldsetItems = adForm.querySelectorAll('fieldset');
-      for (var i = 0; i < fieldsetItems.length; i++) {
-        fieldsetItems[i].disabled = isDisabled;
-      }
+      fieldsetItems.forEach(function (item) {
+        item.disabled = isDisabled;
+      });
     }
   };
 
@@ -19,16 +25,50 @@
   });
 
   adForm.addEventListener('submit', function (evt) {
-    window.backend.save(new FormData(adForm), resetForm, window.backend.onError);
+    var formData = new FormData(adForm);
+    window.backend.save(formData, onSubmitSuccess, window.backend.onError);
     evt.preventDefault();
   });
 
-  function resetForm() {
-    adForm.reset();
-    window.movePinToStart();
-    window.fillAddress();
+  function onSubmitSuccess() {
+    successBlock.classList.remove('hidden');
+    resetForm();
+
+    document.addEventListener('click', onSuccessClick);
+    document.addEventListener('keydown', onSuccessKeydown);
+
   }
 
+  function resetForm() {
+    var mapCard = mapElement.querySelector('.map__card');
+    var previewPhotos = document.querySelectorAll('.ad-form__photo');
+    var mapPinsWitoutMain = mapPinsElement.querySelectorAll('.map__pin:not( .map__pin--main)');
+    var previewAvatarPhoto = document.querySelector('.ad-form-header__preview img');
+    adForm.reset();
+    window.utils.deleteElements(mapPinsWitoutMain);
+    window.utils.deleteElements(previewPhotos);
+    previewAvatarPhoto.src = avatarDefaultUrl;
+    window.movePinToStart();
+    window.fillAddress();
+
+    if (mapCard) {
+      mapElement.removeChild(mapCard);
+    }
+  }
+
+  function onSuccessClick() {
+    hideSuccesBlock();
+    document.removeEventListener('click', onSuccessClick);
+  }
+
+  function onSuccessKeydown(evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      hideSuccesBlock();
+      document.removeEventListener('keydown', onSuccessKeydown);
+    }
+  }
+
+  function hideSuccesBlock() {
+    successBlock.classList.add('hidden');
+  }
 })();
-
-

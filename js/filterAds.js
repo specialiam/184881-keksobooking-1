@@ -1,15 +1,21 @@
 'use strict';
 
 (function () {
+  var RANK_TO_SHOW = 20;
+  var FILTER_RANK = 5;
+  var CHECKBOX_RANK = 1;
+  var LOW_PRICE = 10000;
+  var MID_PRICE = 50000;
+
   var housePriceMap = {
     low: function (value) {
-      return (value < 10000);
+      return (value < LOW_PRICE);
     },
     middle: function (value) {
-      return (value >= 10000 && value <= 50000);
+      return (value >= LOW_PRICE && value <= MID_PRICE);
     },
     high: function (value) {
-      return (value > 50000);
+      return (value > MID_PRICE);
     },
     any: function () {
       return false;
@@ -31,19 +37,19 @@
     var mapCard = mapElement.querySelector('.map__card');
     var checkboxCount = document.querySelectorAll('.map__checkbox:checked').length;
     var filtersWithCheckbox = document.querySelectorAll('.map__filter, .map__checkbox:checked');
-    var valueMap = createValueMap(filtersWithCheckbox);
-    var rankArray = [];
+    var values = createValuesMap(filtersWithCheckbox);
+    var ranks = [];
 
     var adsCopy = ads.slice();
 
     window.totalAds = [];
 
     adsCopy.forEach(function (item) {
-      rankArray.push(getRank(item, valueMap));
+      ranks.push(getRank(item, values));
     });
 
     adsCopy.forEach(function (item, i) {
-      if (getIndices(rankArray, checkboxCount).indexOf(i) !== -1) {
+      if (getIndices(ranks, checkboxCount).indexOf(i) !== -1) {
         window.totalAds.push(item);
       }
     });
@@ -56,27 +62,27 @@
   }
 
 
-  function createValueMap(items) {
-    var valueMap = [];
-    var featureValues = {
+  function createValuesMap(items) {
+    var values = [];
+    var additionalValues = {
       features: []
     };
 
     items.forEach(function (item) {
       var filter = {};
       if (item.attributes.name.nodeValue === 'features') {
-        featureValues.features.push(item.value);
+        additionalValues.features.push(item.value);
       } else {
         filter = {
           id: item.attributes.name.nodeValue.replace('housing-', ''),
           value: item.value
         };
-        valueMap.push(filter);
+        values.push(filter);
       }
     });
-    valueMap.push(featureValues);
+    values.push(additionalValues);
 
-    return valueMap;
+    return values;
   }
 
   function getRank(ad, filterMap) {
@@ -85,23 +91,23 @@
     filterMap.forEach(function (item) {
       if (item.id === 'price') {
         if (housePriceMap[item.value](ad.offer[item.id])) {
-          rank += 5;
+          rank += FILTER_RANK;
         }
       }
 
       if (item.value === 'any') {
-        rank += 5;
+        rank += FILTER_RANK;
       }
 
       if (ad.offer[item.id] + '' === item.value) {
-        rank += 5;
+        rank += FILTER_RANK;
       }
 
       if (item.features && item.features.length > 0) {
         item.features.forEach(function (item1) {
           ad.offer.features.forEach(function (item2) {
             if (item1 === item2) {
-              rank += 1;
+              rank += CHECKBOX_RANK;
             }
           });
         });
@@ -113,9 +119,6 @@
   }
 
   function getIndices(array, countCheck) {
-    var RANK_TO_SHOW = 20;
-    var CHECKBOX_RANK = 1;
-
     var indices = [];
     var element = RANK_TO_SHOW + (countCheck * CHECKBOX_RANK);
     var idx = array.indexOf(element);

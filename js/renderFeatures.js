@@ -2,16 +2,18 @@
 
 (function () {
   var fragment = document.createDocumentFragment();
+
   window.renderFeatures = function (renderBlock, ad) {
-    var featureElements = renderBlock.querySelectorAll('.popup__feature');
-    var featureElement = featureElements[0].cloneNode(true);
+    var featureElement = renderBlock.querySelector('.popup__feature').cloneNode(true);
+
     window.utils.clearBlock(renderBlock);
-    for (var i = 0; i < ad.offer.features.length; i++) {
+
+    ad.offer.features.forEach(function (item) {
       var featurePopup = featureElement.cloneNode(true);
       featurePopup.classList = 'popup__feature';
-      featurePopup.classList.add('popup__feature--' + ad.offer.features[i]);
+      featurePopup.classList.add('popup__feature--' + item);
       fragment.appendChild(featurePopup);
-    }
+    });
 
     return fragment;
   };

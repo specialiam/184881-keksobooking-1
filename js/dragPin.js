@@ -2,7 +2,7 @@
 
 (function () {
   var PIN_HEIGHT = 84; // px
-  var PIN_WIDTH = 65; // px
+  var PIN_WIDTH = 64; // px
   var MAP_BORDER_TOP = 130; // px
   var MAP_BORDER_BOTTOM = 630; // px
 

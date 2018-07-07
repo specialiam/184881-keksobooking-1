@@ -1,6 +1,11 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
+  var OK_CODE = 200;
+
+  var mainBlock = document.querySelector('main');
+  var successBlock = document.querySelector('.success');
   var loadURL = 'https://js.dump.academy/keksobooking/data';
   var saveURL = 'https://js.dump.academy/keksobooking';
 
@@ -10,7 +15,7 @@
       xhr.responseType = 'json';
 
       xhr.addEventListener('load', function () {
-        if (xhr.status === 200) {
+        if (xhr.status === OK_CODE) {
           onLoad(xhr.response);
         } else {
           onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -28,7 +33,7 @@
       xhr.responseType = 'json';
 
       xhr.addEventListener('load', function () {
-        if (xhr.status === 200) {
+        if (xhr.status === OK_CODE) {
           onLoad(xhr.response);
         } else {
           onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -43,14 +48,34 @@
     },
     onError: function (errorMessage) {
       var node = document.createElement('div');
-      node.style = 'z-index: 100; margin-left: -150px; margin-top: -100px; text-align: center; background-color: red; border-radius: 10px; width: 300px; height: 200px; padding-top: 50px; color: #fff; box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.5);';
-      node.style.position = 'absolute';
-      node.style.left = '50%';
-      node.style.top = '50%';
-      node.style.fontSize = '20px';
 
-      node.textContent = 'Ошибка! ' + errorMessage;
-      document.body.insertAdjacentElement('afterbegin', node);
+      node.classList.add('error-block');
+      node.style = 'position: fixed; top: 0; left: 0; z-index: 2; box-sizing: border-box; width: 100%; height: 100%; overflow: auto; padding-top: 300px; text-align: center; vertical-align: middle;background-color: rgba(255, 86, 53, 0.8); color: #fff; font-size: 50px; font-weight: 700;';
+      node.textContent = 'Ошибка при отправке! ' + errorMessage;
+
+      mainBlock.insertBefore(node, successBlock);
+
+      document.addEventListener('click', onErrorClick);
+      document.addEventListener('keydown', onErrorKeydown);
+
     }
   };
+
+  function onErrorClick() {
+    deleteErrorBlock();
+    document.removeEventListener('click', onErrorClick);
+  }
+
+  function onErrorKeydown(evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      deleteErrorBlock();
+      document.removeEventListener('keydown', onErrorKeydown);
+    }
+  }
+
+  function deleteErrorBlock() {
+    var block = document.querySelector('.error-block');
+    block.parentElement.removeChild(block);
+  }
+
 })();
