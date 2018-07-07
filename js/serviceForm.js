@@ -34,7 +34,6 @@
   function onSubmitSuccess() {
     successBlock.classList.remove('hidden');
     resetForm();
-
     document.addEventListener('click', onSuccessClick);
     document.addEventListener('keydown', onSuccessKeydown);
 
@@ -45,6 +44,7 @@
     var previewPhotos = document.querySelectorAll('.ad-form__photo');
     var mapPinsWitoutMain = mapPinsElement.querySelectorAll('.map__pin:not( .map__pin--main)');
     var previewAvatarPhoto = document.querySelector('.ad-form-header__preview img');
+
     adForm.reset();
     filtersForm.reset();
     window.utils.deleteElements(mapPinsWitoutMain);

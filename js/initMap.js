@@ -14,6 +14,7 @@
 
   pinMain.addEventListener('mouseup', onPinMainMouseup);
   pinMain.addEventListener('keydown', onPinMainKeydown);
+
   mapElement.addEventListener('click', onPinClick);
 
   window.backend.load(onAdsLoad, window.backend.onError);

@@ -76,6 +76,7 @@
   function deleteErrorBlock() {
     var block = document.querySelector('.error-block');
     block.parentElement.removeChild(block);
+
   }
 
 })();
