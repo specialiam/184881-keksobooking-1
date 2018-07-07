@@ -50,22 +50,32 @@
       var node = document.createElement('div');
 
       node.classList.add('error-block');
-      node.style = 'position: fixed; top: 0; left: 0; z-index: 2; box-sizing: border-box; width: 100%; height: 100%; overflow: auto; padding-top: 300px; text-align: center; vertical-align: middle;background-color: rgba(255, 114, 0, 0.8); color: #fff; font-size: 50px; font-weight: 700;';
+      node.style = 'position: fixed; top: 0; left: 0; z-index: 2; box-sizing: border-box; width: 100%; height: 100%; overflow: auto; padding-top: 300px; text-align: center; vertical-align: middle;background-color: rgba(255, 86, 53, 0.8); color: #fff; font-size: 50px; font-weight: 700;';
       node.textContent = 'Ошибка при отправке! ' + errorMessage;
 
       mainBlock.insertBefore(node, successBlock);
 
-      document.addEventListener('click', deleteErrorBlock);
-      document.addEventListener('keydown', deleteErrorBlock);
+      document.addEventListener('click', onErrorClick);
+      document.addEventListener('keydown', onErrorKeydown);
 
     }
   };
 
-  function deleteErrorBlock(evt) {
-    var block = document.querySelector('.error-block');
-    if (evt.keyCode === ESC_KEYCODE || evt.type === 'click') {
-      block.parentElement.removeChild(block);
+  function onErrorClick() {
+    deleteErrorBlock();
+    document.removeEventListener('click', onErrorClick);
+  }
+
+  function onErrorKeydown(evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      deleteErrorBlock();
+      document.removeEventListener('keydown', onErrorKeydown);
     }
+  }
+
+  function deleteErrorBlock() {
+    var block = document.querySelector('.error-block');
+    block.parentElement.removeChild(block);
   }
 
 })();

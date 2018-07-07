@@ -2,7 +2,6 @@
 
 (function () {
   var avatarChooser = document.querySelector('.ad-form-header__input');
-  var previewAvatarPhoto = document.querySelector('.ad-form-header__preview img');
   var photosChooser = document.querySelector('.ad-form__upload input');
   var previewPhoto = document.querySelectorAll('.ad-form__photo');
   var previewPhotoTemplate = previewPhoto[0].cloneNode(previewPhoto);
@@ -10,10 +9,11 @@
 
   window.utils.deleteElements(previewPhoto);
 
-  avatarChooser.addEventListener('change', onavatarChooserChange);
+  avatarChooser.addEventListener('change', onAvatarChooserChange);
   photosChooser.addEventListener('change', onPhotosChooserChange);
 
-  function onavatarChooserChange() {
+  function onAvatarChooserChange() {
+    var previewAvatarPhoto = document.querySelector('.ad-form-header__preview img');
     var photo = avatarChooser.files[0];
     var previewContainer = previewAvatarPhoto.parentElement;
     var photoPreview = renderPhotoPreview(photo, previewAvatarPhoto);

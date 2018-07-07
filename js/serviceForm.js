@@ -7,7 +7,6 @@
   var mapPinsElement = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
   var resetBtn = document.querySelector('.ad-form__reset');
-  var previewAvatarPhoto = document.querySelector('.ad-form-header__preview img');
   var successBlock = document.querySelector('.success');
   var fieldsetItems = adForm.querySelectorAll('fieldset');
   var avatarDefaultUrl = 'img/muffin-grey.svg';
@@ -27,27 +26,28 @@
 
   adForm.addEventListener('submit', function (evt) {
     var formData = new FormData(adForm);
-
     window.backend.save(formData, onSubmitSuccess, window.backend.onError);
     evt.preventDefault();
   });
 
   function onSubmitSuccess() {
     successBlock.classList.remove('hidden');
-    document.addEventListener('click', hideSuccesBlock);
-    document.addEventListener('keydown', hideSuccesBlock);
     resetForm();
+
+    document.addEventListener('click', onSuccessClick);
+    document.addEventListener('keydown', onSuccessKeydown);
+
   }
 
   function resetForm() {
     var mapCard = mapElement.querySelector('.map__card');
     var previewPhotos = document.querySelectorAll('.ad-form__photo');
     var mapPinsWitoutMain = mapPinsElement.querySelectorAll('.map__pin:not( .map__pin--main)');
-
+    var previewAvatarPhoto = document.querySelector('.ad-form-header__preview img');
+    adForm.reset();
     window.utils.deleteElements(mapPinsWitoutMain);
     window.utils.deleteElements(previewPhotos);
     previewAvatarPhoto.src = avatarDefaultUrl;
-    adForm.reset();
     window.movePinToStart();
     window.fillAddress();
 
@@ -56,10 +56,19 @@
     }
   }
 
-  function hideSuccesBlock(evt) {
-    if (evt.keyCode === ESC_KEYCODE || evt.type === 'click') {
-      successBlock.classList.add('hidden');
-      document.removeEventListener(evt.type, hideSuccesBlock);
+  function onSuccessClick() {
+    hideSuccesBlock();
+    document.removeEventListener('click', onSuccessClick);
+  }
+
+  function onSuccessKeydown(evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      hideSuccesBlock();
+      document.removeEventListener('keydown', onSuccessKeydown);
     }
+  }
+
+  function hideSuccesBlock() {
+    successBlock.classList.add('hidden');
   }
 })();
