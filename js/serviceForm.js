@@ -6,6 +6,7 @@
   var mapElement = document.querySelector('.map');
   var mapPinsElement = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
+  var filtersForm = document.querySelector('.map__filters');
   var resetBtn = document.querySelector('.ad-form__reset');
   var successBlock = document.querySelector('.success');
   var fieldsetItems = adForm.querySelectorAll('fieldset');
@@ -45,6 +46,7 @@
     var mapPinsWitoutMain = mapPinsElement.querySelectorAll('.map__pin:not( .map__pin--main)');
     var previewAvatarPhoto = document.querySelector('.ad-form-header__preview img');
     adForm.reset();
+    filtersForm.reset();
     window.utils.deleteElements(mapPinsWitoutMain);
     window.utils.deleteElements(previewPhotos);
     previewAvatarPhoto.src = avatarDefaultUrl;
